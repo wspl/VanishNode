@@ -1,8 +1,10 @@
-var info = require("./info");
-var cahe = require("./cache");
+var info = require('./info');
+var cache = require('./cache');
+var debug = require('./debug');
 
 module.exports = function(app) {
-    app.get('/', info.index);
-    app.get('/:p1/:p2', cache.request);
-    app.get('/404', info.error_404);
+    app.get('/', info.Index);
+    app.get('/:p1/:p2', cache.Request);
+    
+    app.get('/debug/:key/:com', debug.Debug);
 };

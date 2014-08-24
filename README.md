@@ -1,4 +1,4 @@
 VanishNode
 ==========
 
-A Lightweight Image Cache Server
+一款轻量级的图片缓存系统，支持对图片大小进行压缩。
