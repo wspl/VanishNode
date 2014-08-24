@@ -1,0 +1,11 @@
+{
+  "name": "VanishNode",
+  "description": "lightweight images caching scheme",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "express": "4.8.5",
+    "MD5": "1.2.1",
+    "sharp": "0.5.2"
+  }
+}
