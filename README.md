@@ -9,6 +9,7 @@ VanishNode 是一款采用 **Node.js** 和 **Redis** 编写的轻量级的跨平
 // install node npm redis-server libvips-dev
 // run redis-server
 $ npm install
+$ npm install hiredis redis
 $ vim config.js
 // edit config.js file as yours
 $ node vanish.js
