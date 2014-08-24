@@ -9,12 +9,12 @@ var config = {
     debugKey: 'vanish',         //调试模式密钥
     
     /* Redis设置 */
-    dbPort: 6379,        //Redis数据库端口
+    dbPort: 6379,               //Redis数据库端口
     dbPre: 'vn',                //键值前缀
     
     /* 缓存设置 */
     storagePath: './storage',   //存储目录，末尾不带'/'
-    partNum: 1,               //分区特征，1对应36个区，n对应36^n个区
+    partNum: 1,                 //分区特征，1对应16个区，n对应16^n个区
     maxSize: 3,                 //允许的最大缓存大小，单位：MB
     
     /* 压缩设置 */

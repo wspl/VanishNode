@@ -1,10 +1,19 @@
 var info = require('./info');
 var cache = require('./cache');
 var debug = require('./debug');
+var config = require('./config').config;
 
 module.exports = function(app) {
-    app.get('/', info.Index);
-    app.get('/:p1/:p2', cache.Request);
+    var toVanish = function(arg,func){
+        app.get(arg,function(req,res){
+            res.set('X-Powered-By','VanishNode/' + config.version);
+            res.set('X-Cache','Hit from ' + config.nodeName);
+            func(req,res);
+        });
+    };
     
-    app.get('/debug/:key/:com', debug.Debug);
+    toVanish('/', info.Index);
+    toVanish('/:p1/:p2', cache.Request);
+    
+    toVanish('/debug/:key/:com', debug.Debug);
 };
