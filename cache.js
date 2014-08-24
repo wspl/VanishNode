@@ -2,7 +2,7 @@ var md5 = require('MD5');
 var sharp = require('sharp');
 var redis = require('redis');
 var request = require('request');
-var fs = require('fs');
+var fs = require('graceful-fs');
 var info = require('./info');
 var urlcrypt = require('./urlcrypt');
 var config = require('./config').config;
@@ -21,8 +21,12 @@ var URLCache = function (Token, imageSize, callback){
                 callback(null, GetCache(reply,imageSize));
             }else{
                 ImageCache(reqURL, imageSize, function(err, result, imageHash){
-                    client.set(dbKey,imageHash);
-                    callback(err, result);
+                    if(!err){
+                        client.set(dbKey,imageHash);
+                        callback(err, result);
+                    }else{
+                        callback(err);
+                    }
                 });
             }
         }else{
@@ -48,7 +52,7 @@ var ImageCache = function (reqURL, imageSize, callback){
                 });
             });
         }else{
-            callback("Invalid URL!");
+            callback("无效的远程URL！");
         }
     });
 };
@@ -69,12 +73,22 @@ var DownloadImage = function (reqURL, callback){
 }
 
 var VerifyURL = function (reqURL, callback){
-    var allowType = ['image/jpeg','image/png','image/gif'];
+    var allowType = ['image/jpg','image/jpeg','image/png','image/gif'];
     request(reqURL, function (err, res, body){
-        if(allowType.indexOf(res.headers['content-type']) != -1
-        && parseInt(res.headers['content-length']) <= config.maxSize * 1024 * 1024){
-            callback(true);
+        if(!err){
+            if(allowType.indexOf(res.headers['content-type']) != -1
+            && parseInt(res.headers['content-length']) <= config.maxSize * 1024 * 1024){
+                callback(true);
+            }else{
+                //console.log(allowType.indexOf(res.headers['content-type']) != -1);
+                //console.log(parseInt(res.headers['content-length']) <= config.maxSize * 1024 * 1024);
+                console.log(err);
+                console.log(reqURL);
+                callback(false);
+            }
         }else{
+            console.log(err);
+            console.log(reqURL);
             callback(false);
         }
     });
@@ -102,9 +116,9 @@ exports.Request = function (req, res){
             URLCache(p2, p1, function(err, result){
                 if(!err){
                     res.set('Content-Type', 'image/jpeg');
-                    res.sendfile(result);
+                    res.sendFile(result);
                 }else{
-                    res.send("yooo" + err);
+                    res.send(err);
                 }
             });
         }else if(config.allowSize.indexOf(parseInt(p2)) != -1){
@@ -112,9 +126,9 @@ exports.Request = function (req, res){
             URLCache(p1, p2, function(err, result){
                 if(!err){
                     res.set('Content-Type', 'image/jpeg');
-                    res.sendfile(result);
+                    res.sendFile(__dirname+result);
                 }else{
-                    res.send("yooo" + err);
+                    res.send(err);
                 }
             });
             

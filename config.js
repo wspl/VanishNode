@@ -13,13 +13,12 @@ var config = {
     dbPre: 'vn',                //键值前缀
     
     /* 缓存设置 */
-    storagePath: './.storage',   //存储目录，末尾不带'/'
+    storagePath: __dirname + '/.storage',   //存储目录，末尾不带'/'，必须是绝对路径
     partNum: 1,                 //分区特征，1对应16个区，n对应16^n个区
     maxSize: 3,                 //允许的最大缓存大小，单位：MB
     
     /* 压缩设置 */
-    allowSize: [1280,640,240],  //允许的缓存的大小
-    tempPath: './temp',         //图片临时文件夹
+    allowSize: [0,1280,640,240],  //允许的缓存的宽度，0为不调整大小
     
     /* 程序信息 */
     version: pkg.version,
